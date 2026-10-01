@@ -1,0 +1,15 @@
+Binaries/
+Build/Windows/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+.idea/
+.git/
+*.sln
+*.suo
+*.user
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.VC.opendb
