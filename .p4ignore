@@ -1,4 +1,6 @@
 Binaries/
+!Build/Windows/**/Binaries/
+!Build/Windows/**/Binaries/**
 DerivedDataCache/
 Intermediate/
 Saved/
