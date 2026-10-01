@@ -52,7 +52,7 @@ void USpaceShooterHUDWidget::NativeConstruct()
 		TitleSlot->SetHorizontalAlignment(HAlign_Center);
 	}
 
-	UTextBlock* TeamLabel = CreateLabel(FText::FromString(TEXT("Équipe : à compléter")), 16,
+	UTextBlock* TeamLabel = CreateLabel(FText::FromString(TEXT("Equipe : Alexis Chopin")), 16,
 		FLinearColor(0.82f, 0.86f, 0.9f, 1.0f));
 	if (UVerticalBoxSlot* TeamSlot = MenuPanel->AddChildToVerticalBox(TeamLabel))
 	{
