@@ -1,4 +1,6 @@
-# Space Shooter
+# SpaceShooter
+
+Unreal SpaceShooter
 
 Prototype C++ pour Unreal Engine 5.8. Le vaisseau, les projectiles, les asteroides, le spawn, le score, les vies et l'interface sont implementes dans le module `SpaceShooter`. Les assets de mesh peuvent etre remplaces dans des Blueprints derives.
 
