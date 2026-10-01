@@ -22,7 +22,7 @@ Le packaging est configure en Shipping avec pak et compression. Le prototype uti
 
 ## Git merge rehearsal
 
-Versioning test: common baseline.
+Versioning test: dev revision.
 
 ## Contenu a fournir
 
