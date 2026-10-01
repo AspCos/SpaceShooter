@@ -20,6 +20,10 @@ Depuis PowerShell, dans le dossier du projet :
 
 Le packaging est configure en Shipping avec pak et compression. Le prototype utilise actuellement la map moteur `Entry` pour le menu et le jeu ; les maps distinctes Menu et Niveau de jeu restent a creer dans le contenu du projet.
 
+## Git merge rehearsal
+
+Versioning test: common baseline.
+
 ## Contenu a fournir
 
 Les meshes sont des primitives de l'Engine. Les effets de tir et de destruction sont des proprietes Blueprint a renseigner. Le nom des membres de l'equipe, les captures d'historique Git/Perforce et la video de demonstration sont egalement a ajouter.
