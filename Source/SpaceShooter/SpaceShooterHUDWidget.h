@@ -15,7 +15,7 @@ class SPACESHOOTER_API USpaceShooterHUDWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	virtual void NativeConstruct() override;
+	virtual void NativeOnInitialized() override;
 	void ShowMainMenu();
 	void ShowGameplay();
 	void ShowGameOver();

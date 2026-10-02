@@ -6,12 +6,10 @@
 
 class AProjectile;
 class UParticleSystem;
-class USceneComponent;
 class USphereComponent;
 class UStaticMeshComponent;
 class UFloatingPawnMovement;
 class UPrimitiveComponent;
-class UInputComponent;
 
 UCLASS()
 class SPACESHOOTER_API AShipPawn : public APawn
@@ -22,25 +20,24 @@ public:
 	AShipPawn();
 
 	virtual void Tick(float DeltaSeconds) override;
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	virtual void EnableInput(APlayerController* PlayerController) override;
+	virtual void DisableInput(APlayerController* PlayerController) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Ship")
-	void MoveHorizontal(float Value);
-
-	UFUNCTION(BlueprintCallable, Category = "Ship")
-	void MoveVertical(float Value);
-
-	UFUNCTION(BlueprintCallable, Category = "Ship")
-	void Fire();
+	void FireInDirection(const FVector& Direction);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ship|Movement")
 	float MoveSpeed = 900.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ship|Movement")
-	FVector2D MovementBounds = FVector2D(1050.0f, 550.0f);
+	FVector2D MovementBounds = FVector2D(550.0f, 1050.0f);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ship|Weapon")
 	float FireInterval = 0.25f;
+
+	// Distance entre le centre du vaisseau et l'apparition du projectile
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ship|Weapon")
+	float MuzzleOffset = 70.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ship|Weapon")
 	TSubclassOf<AProjectile> ProjectileClass;
@@ -64,10 +61,8 @@ private:
 	UStaticMeshComponent* ShipMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	USceneComponent* ProjectileSpawnPoint;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UFloatingPawnMovement* MovementComponent;
 
 	float LastFireTime = -1.0e9f;
+	bool bControlsEnabled = true;
 };

@@ -27,5 +27,4 @@ Versioning test: Perforce main revision.
 ## Contenu a fournir
 
 Les meshes sont des primitives de l'Engine. Les effets de tir et de destruction sont des proprietes Blueprint a renseigner. Le nom des membres de l'equipe, les captures d'historique Git/Perforce et la video de demonstration sont egalement a ajouter.
-
-Les streams Perforce `Main` et `dev` existent deja sur le serveur, mais le workspace local `AspergeV2` est mappe vers un autre depot. Le depot Git public est `AspCos/SpaceShooter`.
+Le depot Git public est `AspCos/SpaceShooter`.

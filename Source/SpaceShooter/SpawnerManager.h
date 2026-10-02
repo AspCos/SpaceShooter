@@ -27,7 +27,7 @@ public:
 	float MaxSpawnInterval = 1.8f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-	FVector2D SpawnBounds = FVector2D(1350.0f, 800.0f);
+	FVector2D SpawnBounds = FVector2D(800.0f, 1350.0f);
 
 protected:
 	virtual void BeginPlay() override;

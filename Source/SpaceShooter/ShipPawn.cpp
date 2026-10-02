@@ -3,7 +3,8 @@
 #include "Asteroid.h"
 #include "Projectile.h"
 #include "SpaceShooterGameMode.h"
-#include "Components/SceneComponent.h"
+#include "InputCoreTypes.h"
+#include "GameFramework/PlayerController.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
@@ -34,10 +35,6 @@ AShipPawn::AShipPawn()
 		ShipMesh->SetRelativeScale3D(FVector(0.75f, 0.75f, 0.35f));
 	}
 
-	ProjectileSpawnPoint = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawnPoint"));
-	ProjectileSpawnPoint->SetupAttachment(CollisionComponent);
-	ProjectileSpawnPoint->SetRelativeLocation(FVector(70.0f, 0.0f, 0.0f));
-
 	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("Movement"));
 	MovementComponent->bConstrainToPlane = true;
 	MovementComponent->SetPlaneConstraintNormal(FVector::UpVector);
@@ -56,6 +53,32 @@ void AShipPawn::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController && bControlsEnabled)
+	{
+		// Déplacement : ZQSD (X = haut de l'écran, Y = droite de l'écran)
+		FVector MoveInput = FVector::ZeroVector;
+		if (PlayerController->IsInputKeyDown(EKeys::Z)) { MoveInput.X += 1.0f; }
+		if (PlayerController->IsInputKeyDown(EKeys::S)) { MoveInput.X -= 1.0f; }
+		if (PlayerController->IsInputKeyDown(EKeys::D)) { MoveInput.Y += 1.0f; }
+		if (PlayerController->IsInputKeyDown(EKeys::Q)) { MoveInput.Y -= 1.0f; }
+		if (!MoveInput.IsNearlyZero())
+		{
+			AddMovementInput(MoveInput.GetSafeNormal(), 1.0f);
+		}
+
+		// Tir : flèches directionnelles
+		FVector FireDirection = FVector::ZeroVector;
+		if (PlayerController->IsInputKeyDown(EKeys::Up)) { FireDirection.X += 1.0f; }
+		if (PlayerController->IsInputKeyDown(EKeys::Down)) { FireDirection.X -= 1.0f; }
+		if (PlayerController->IsInputKeyDown(EKeys::Right)) { FireDirection.Y += 1.0f; }
+		if (PlayerController->IsInputKeyDown(EKeys::Left)) { FireDirection.Y -= 1.0f; }
+		if (!FireDirection.IsNearlyZero())
+		{
+			FireInDirection(FireDirection);
+		}
+	}
+
 	FVector Location = GetActorLocation();
 	Location.X = FMath::Clamp(Location.X, -MovementBounds.X, MovementBounds.X);
 	Location.Y = FMath::Clamp(Location.Y, -MovementBounds.Y, MovementBounds.Y);
@@ -63,30 +86,32 @@ void AShipPawn::Tick(float DeltaSeconds)
 	SetActorLocation(Location);
 }
 
-void AShipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AShipPawn::EnableInput(APlayerController* PlayerController)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAxis(TEXT("MoveHorizontal"), this, &AShipPawn::MoveHorizontal);
-	PlayerInputComponent->BindAxis(TEXT("MoveVertical"), this, &AShipPawn::MoveVertical);
-	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AShipPawn::Fire);
+	bControlsEnabled = true;
+	Super::EnableInput(PlayerController);
 }
 
-void AShipPawn::MoveHorizontal(float Value)
+void AShipPawn::DisableInput(APlayerController* PlayerController)
 {
-	AddMovementInput(FVector::ForwardVector, Value);
+	bControlsEnabled = false;
+	Super::DisableInput(PlayerController);
 }
 
-void AShipPawn::MoveVertical(float Value)
-{
-	AddMovementInput(FVector::RightVector, Value);
-}
-
-void AShipPawn::Fire()
+void AShipPawn::FireInDirection(const FVector& Direction)
 {
 	if (!ProjectileClass || !GetWorld())
 	{
 		return;
 	}
+
+	FVector FlatDirection = Direction;
+	FlatDirection.Z = 0.0f;
+	if (FlatDirection.IsNearlyZero())
+	{
+		return;
+	}
+	FlatDirection.Normalize();
 
 	const float CurrentTime = GetWorld()->GetTimeSeconds();
 	if (CurrentTime - LastFireTime < FireInterval)
@@ -95,7 +120,8 @@ void AShipPawn::Fire()
 	}
 	LastFireTime = CurrentTime;
 
-	const FTransform SpawnTransform = ProjectileSpawnPoint->GetComponentTransform();
+	const FTransform SpawnTransform(
+		FlatDirection.Rotation(), GetActorLocation() + FlatDirection * MuzzleOffset);
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.Owner = this;
 	SpawnParameters.Instigator = this;

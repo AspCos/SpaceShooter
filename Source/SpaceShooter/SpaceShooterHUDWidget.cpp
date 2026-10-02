@@ -9,11 +9,12 @@
 #include "Components/VerticalBoxSlot.h"
 #include "Blueprint/WidgetTree.h"
 #include "Fonts/SlateFontInfo.h"
+#include "Styling/CoreStyle.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-void USpaceShooterHUDWidget::NativeConstruct()
+void USpaceShooterHUDWidget::NativeOnInitialized()
 {
-	Super::NativeConstruct();
+	Super::NativeOnInitialized();
 	if (!WidgetTree)
 	{
 		return;
@@ -25,9 +26,7 @@ void USpaceShooterHUDWidget::NativeConstruct()
 	StatsLabel = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("StatsLabel"));
 	StatsLabel->SetText(FText::FromString(TEXT("SCORE 000000   VIES 3")));
 	StatsLabel->SetColorAndOpacity(FSlateColor(FLinearColor::White));
-	FSlateFontInfo StatsFont;
-	StatsFont.Size = 24;
-	StatsLabel->SetFont(StatsFont);
+	StatsLabel->SetFont(FCoreStyle::GetDefaultFontStyle("Bold", 24));
 	if (UCanvasPanelSlot* StatsSlot = RootCanvas->AddChildToCanvas(StatsLabel))
 	{
 		StatsSlot->SetAnchors(FAnchors(0.0f, 0.0f));
@@ -72,7 +71,7 @@ void USpaceShooterHUDWidget::NativeConstruct()
 		GameOverSlot->SetAlignment(FVector2D(0.5f, 0.5f));
 		GameOverSlot->SetSize(FVector2D(460.0f, 140.0f));
 	}
-	UTextBlock* GameOverLabel = CreateLabel(FText::FromString(TEXT("PARTIE TERMINÉE")), 34,
+	UTextBlock* GameOverLabel = CreateLabel(FText::FromString(TEXT("PARTIE TERMIN\u00C9E")), 34,
 		FLinearColor(1.0f, 0.46f, 0.35f, 1.0f));
 	if (UVerticalBoxSlot* GameOverLabelSlot = GameOverPanel->AddChildToVerticalBox(GameOverLabel))
 	{
@@ -87,6 +86,10 @@ void USpaceShooterHUDWidget::NativeConstruct()
 
 void USpaceShooterHUDWidget::ShowMainMenu()
 {
+	if (!MenuPanel || !StatsLabel || !GameOverPanel)
+	{
+		return;
+	}
 	MenuPanel->SetVisibility(ESlateVisibility::Visible);
 	StatsLabel->SetVisibility(ESlateVisibility::Hidden);
 	GameOverPanel->SetVisibility(ESlateVisibility::Hidden);
@@ -94,6 +97,10 @@ void USpaceShooterHUDWidget::ShowMainMenu()
 
 void USpaceShooterHUDWidget::ShowGameplay()
 {
+	if (!MenuPanel || !StatsLabel || !GameOverPanel)
+	{
+		return;
+	}
 	MenuPanel->SetVisibility(ESlateVisibility::Hidden);
 	StatsLabel->SetVisibility(ESlateVisibility::Visible);
 	GameOverPanel->SetVisibility(ESlateVisibility::Hidden);
@@ -101,6 +108,10 @@ void USpaceShooterHUDWidget::ShowGameplay()
 
 void USpaceShooterHUDWidget::ShowGameOver()
 {
+	if (!MenuPanel || !GameOverPanel)
+	{
+		return;
+	}
 	MenuPanel->SetVisibility(ESlateVisibility::Hidden);
 	GameOverPanel->SetVisibility(ESlateVisibility::Visible);
 }
@@ -133,9 +144,7 @@ UTextBlock* USpaceShooterHUDWidget::CreateLabel(const FText& Text, int32 FontSiz
 	UTextBlock* Label = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass());
 	Label->SetText(Text);
 	Label->SetColorAndOpacity(FSlateColor(Color));
-	FSlateFontInfo Font;
-	Font.Size = FontSize;
-	Label->SetFont(Font);
+	Label->SetFont(FCoreStyle::GetDefaultFontStyle("Bold", FontSize));
 	return Label;
 }
 

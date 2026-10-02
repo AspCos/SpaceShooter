@@ -7,6 +7,8 @@
 ASpaceShooterPlayerController::ASpaceShooterPlayerController()
 {
 	bShowMouseCursor = false;
+	// Empêche Unreal de remplacer la caméra orthographique par la vue du pawn au Possess
+	bAutoManageActiveCameraTarget = false;
 }
 
 void ASpaceShooterPlayerController::BeginPlay()
