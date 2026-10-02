@@ -126,6 +126,11 @@ void AShipPawn::FireInDirection(const FVector& Direction)
 	SpawnParameters.Owner = this;
 	SpawnParameters.Instigator = this;
 	GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnTransform, SpawnParameters);
+	if (FireSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, FireSound,
+			SpawnTransform.GetLocation(), FireSoundVolume);
+	}
 
 	if (MuzzleEffect)
 	{

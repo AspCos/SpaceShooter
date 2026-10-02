@@ -7,6 +7,7 @@
 class UParticleSystem;
 class USphereComponent;
 class UStaticMeshComponent;
+class USoundBase;
 
 UCLASS()
 class SPACESHOOTER_API AAsteroid : public AActor
@@ -32,11 +33,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Asteroid|Movement")
 	float FlightSpeed = 350.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Asteroid|Movement")
+	float RotationSpeed = 45.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Asteroid|Score")
 	int32 ScoreValue = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Asteroid|Effects")
 	UParticleSystem* DestructionEffect = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Asteroid|Effects")
+	USoundBase* ExplosionSound = nullptr;
 
 protected:
 	virtual void BeginPlay() override;
@@ -49,4 +56,5 @@ private:
 	UStaticMeshComponent* AsteroidMesh;
 
 	FVector FlightDirection = FVector::ZeroVector;
+	float RotationDirection = 1.0f;
 };

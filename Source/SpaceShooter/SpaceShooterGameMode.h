@@ -8,6 +8,7 @@ class AAsteroid;
 class AShipPawn;
 class ASpawnerManager;
 class ASpaceShooterPlayerController;
+class USoundBase;
 
 UCLASS()
 class SPACESHOOTER_API ASpaceShooterGameMode : public AGameModeBase
@@ -36,6 +37,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game|Lives")
 	int32 StartingLives = 3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game|Audio")
+	USoundBase* AmbientMusic = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game|Audio", meta = (ClampMin = "0.0", ClampMax = "1.0"))
+	float AmbientMusicVolume = 0.35f;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Game|Score")
 	int32 CurrentScore = 0;

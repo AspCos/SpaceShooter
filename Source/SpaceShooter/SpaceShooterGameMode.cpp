@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 ASpaceShooterGameMode::ASpaceShooterGameMode()
 {
@@ -22,6 +23,10 @@ void ASpaceShooterGameMode::StartPlay()
 	Super::StartPlay();
 	CurrentScore = 0;
 	RemainingLives = StartingLives;
+	if (AmbientMusic)
+	{
+		UGameplayStatics::SpawnSound2D(this, AmbientMusic, AmbientMusicVolume);
+	}
 
 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 	if (!PlayerController)

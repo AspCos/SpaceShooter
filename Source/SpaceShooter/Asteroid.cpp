@@ -37,6 +37,7 @@ void AAsteroid::BeginPlay()
 	Super::BeginPlay();
 	HitPoints = FMath::RandRange(FMath::Min(MinHitPoints, MaxHitPoints),
 		FMath::Max(MinHitPoints, MaxHitPoints));
+	RotationDirection = FMath::RandBool() ? 1.0f : -1.0f;
 	SetLifeSpan(25.0f);
 }
 
@@ -46,6 +47,8 @@ void AAsteroid::Tick(float DeltaSeconds)
 	if (!FlightDirection.IsNearlyZero())
 	{
 		AddActorWorldOffset(FlightDirection * FlightSpeed * DeltaSeconds, true);
+		AddActorLocalRotation(FRotator(0.0f, 0.0f,
+			RotationDirection * RotationSpeed * DeltaSeconds));
 	}
 }
 
@@ -65,6 +68,10 @@ void AAsteroid::ApplyHit(int32 Damage)
 	if (DestructionEffect)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestructionEffect, GetActorTransform());
+	}
+	if (ExplosionSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation());
 	}
 	if (ASpaceShooterGameMode* GameMode = GetWorld()->GetAuthGameMode<ASpaceShooterGameMode>())
 	{

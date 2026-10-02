@@ -6,6 +6,7 @@
 
 class AProjectile;
 class UParticleSystem;
+class USoundBase;
 class USphereComponent;
 class UStaticMeshComponent;
 class UFloatingPawnMovement;
@@ -44,6 +45,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ship|Weapon")
 	UParticleSystem* MuzzleEffect = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ship|Weapon")
+	USoundBase* FireSound = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ship|Weapon", meta = (ClampMin = "0.0", ClampMax = "1.0"))
+	float FireSoundVolume = 0.8f;
 
 protected:
 	virtual void BeginPlay() override;
