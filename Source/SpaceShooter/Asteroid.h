@@ -45,6 +45,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Asteroid|Effects")
 	USoundBase* ExplosionSound = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Asteroid|Effects", meta = (ClampMin = "0.0", ClampMax = "1.0"))
+	float ExplosionSoundVolume = 1.0f;
+
 protected:
 	virtual void BeginPlay() override;
 

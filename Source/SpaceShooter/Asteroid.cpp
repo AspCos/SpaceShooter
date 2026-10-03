@@ -71,7 +71,8 @@ void AAsteroid::ApplyHit(int32 Damage)
 	}
 	if (ExplosionSound)
 	{
-		UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(
+			this, ExplosionSound, GetActorLocation(), FRotator::ZeroRotator, ExplosionSoundVolume);
 	}
 	if (ASpaceShooterGameMode* GameMode = GetWorld()->GetAuthGameMode<ASpaceShooterGameMode>())
 	{
